@@ -3,10 +3,10 @@ import { Heart, Menu, Search, ShoppingCart, UserRound } from "lucide-react";
 import { Badge, Button, Container, Logo } from "@w1zll/shop-ui";
 
 const navItems = [
-  { href: "/catalog", label: "Каталог" },
-  { href: "/search", label: "Поиск" },
-  { href: "/cart", label: "Корзина" },
-  { href: "/account", label: "Аккаунт" },
+  { href: "/catalog", label: "Каталог", zone: "catalog" },
+  { href: "/search", label: "Поиск", zone: "catalog" },
+  { href: "/cart", label: "Корзина", zone: "shell" },
+  { href: "/account", label: "Аккаунт", zone: "shell" },
 ] as const;
 
 export function SiteHeader() {
@@ -30,7 +30,11 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-1 md:flex" aria-label="Основная навигация">
           {navItems.map((item) => (
             <Button key={item.href} asChild variant="ghost">
-              <Link href={item.href}>{item.label}</Link>
+              {item.zone === "catalog" ? (
+                <a href={item.href}>{item.label}</a>
+              ) : (
+                <Link href={item.href}>{item.label}</Link>
+              )}
             </Button>
           ))}
         </nav>

@@ -9,10 +9,11 @@
 - Header и Footer;
 - главная страница;
 - маршруты shell-зоны;
+- route-level composition для catalog zone через Next rewrites;
 - будущая загрузка cart/account remotes через Module Federation;
-- будущие rewrites к catalog zone, API и remote assets.
+- будущие rewrites к API и remote assets.
 
-На текущем этапе реализован только bootstrap shell без API и Module Federation.
+На текущем этапе shell проксирует catalog zone, но API и Module Federation ещё не подключены.
 
 ## Технологии
 
@@ -34,10 +35,29 @@ pnpm install
 pnpm dev
 ```
 
-Локальный адрес:
+Для проверки интеграции каталога запустите рядом `shop-catalog` на порту `3001`.
+Shell должен быть открыт как основной вход в приложение:
 
 ```text
 http://localhost:3000
+```
+
+Переменная окружения:
+
+```text
+CATALOG_ORIGIN=http://localhost:3001
+```
+
+Если переменная не задана, используется локальное значение `http://localhost:3001`.
+
+Через shell доступны маршруты каталога:
+
+```text
+/catalog
+/category/[slug]
+/product/[slug]
+/search
+/catalog-static/*
 ```
 
 ## Проверки
