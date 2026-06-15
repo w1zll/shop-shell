@@ -41,10 +41,10 @@ export default function HomePage() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
-                <Link href="/catalog">
+                <a href="/catalog">
                   Открыть каталог
                   <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
+                </a>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link href="/account">Проверить аккаунт</Link>
@@ -105,20 +105,20 @@ export default function HomePage() {
               </p>
             </div>
             <Button asChild variant="ghost">
-              <Link href="/catalog">Все категории</Link>
+              <a href="/catalog">Все категории</a>
             </Button>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
             {featuredCategories.map((category) => (
-              <Link
+              <a
                 key={category.href}
                 className={`block rounded-lg p-5 ring-1 transition hover:-translate-y-0.5 hover:shadow-[var(--shop-shadow-md)] ${category.tone}`}
                 href={category.href}
               >
                 <h3 className="text-lg font-semibold">{category.name}</h3>
                 <p className="mt-2 text-sm leading-6">{category.description}</p>
-              </Link>
+              </a>
             ))}
           </div>
         </Container>
@@ -153,7 +153,7 @@ export default function HomePage() {
                     <div className="mt-auto flex items-center justify-between gap-3">
                       <Price className="text-base font-semibold" valueCents={product.priceCents} />
                       <Button asChild size="sm" variant="outline">
-                        <Link href={product.href}>Смотреть</Link>
+                        <a href={product.href}>Смотреть</a>
                       </Button>
                     </div>
                   </div>
