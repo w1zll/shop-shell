@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { Heart, Menu, Search, ShoppingCart, UserRound } from "lucide-react";
-import { Badge, Button, Container, Logo } from "@w1zll/shop-ui";
+import { Heart, Menu, Search, UserRound } from "lucide-react";
+import { Button, Container, Logo } from "@w1zll/shop-ui";
+
+import { CartIndicatorRemote } from "./remotes/cart-remotes";
 
 const navItems = [
   { href: "/catalog", label: "Каталог", zone: "catalog" },
@@ -51,12 +53,7 @@ export function SiteHeader() {
           >
             <Heart className="size-4" aria-hidden="true" />
           </Button>
-          <Button asChild className="relative size-10 p-0" variant="outline">
-            <Link href="/cart" aria-label="Корзина">
-              <ShoppingCart className="size-4" aria-hidden="true" />
-              <Badge className="absolute -right-2 -top-2 px-1.5 py-0 text-[10px]">0</Badge>
-            </Link>
-          </Button>
+          <CartIndicatorRemote />
           <Button asChild className="hidden gap-2 sm:inline-flex" variant="outline">
             <Link href="/account">
               <UserRound className="size-4" aria-hidden="true" />

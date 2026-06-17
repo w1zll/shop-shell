@@ -7,6 +7,8 @@ type MockComponentProps = React.PropsWithChildren<{
   className?: string;
   href?: string;
   onClick?: () => void;
+  label?: string;
+  remoteName?: string;
   title?: string;
   description?: string;
   valueCents?: number;
@@ -41,8 +43,8 @@ vi.mock("@w1zll/shop-ui", () => {
     Logo: () => React.createElement("div", null, "Shop MFS"),
     Price: ({ valueCents }: MockComponentProps) =>
       React.createElement("span", null, `${String(valueCents)} cents`),
-    RemoteErrorFallback: ({ children }: MockComponentProps) =>
-      React.createElement("section", null, children),
+    RemoteErrorFallback: ({ children, remoteName }: MockComponentProps) =>
+      React.createElement("section", null, remoteName, children),
     Skeleton: createComponent("div"),
     Toaster: () => null,
   };
