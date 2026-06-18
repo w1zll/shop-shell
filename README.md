@@ -50,6 +50,7 @@ http://localhost:3000
 
 ```text
 CATALOG_ORIGIN=http://localhost:3001
+API_ORIGIN=http://localhost:4000
 NEXT_PUBLIC_CART_MANIFEST_URL=http://localhost:3002/mf-manifest.json
 NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 ```
@@ -77,6 +78,9 @@ NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 `/cart` и `/checkout` получают `noindex`. Во время server prerender shell отдаёт fallback-разметку,
 а Module Federation Runtime загружает remote только в браузере после mount. Это позволяет выполнять
 `next build` без запущенного `shop-mf-cart`.
+
+Browser-запросы remote к `/api/v1/*` проксируются shell в `API_ORIGIN`. Локально это
+`http://localhost:4000`, поэтому cart remote внутри shell остаётся same-origin для браузера.
 
 ## Module Federation
 
