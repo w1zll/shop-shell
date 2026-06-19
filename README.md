@@ -1,4 +1,4 @@
-# Shop Shell
+﻿# Shop Shell
 
 `shop-shell` — основное Next.js-приложение демонстрационного магазина на микрофронтендах.
 
@@ -10,12 +10,11 @@
 - главная страница;
 - маршруты shell-зоны;
 - route-level composition для catalog zone через Next rewrites;
-- загрузка cart remote через Module Federation Runtime;
-- подготовленная конфигурация account remote;
-- будущие rewrites к API и remote assets.
+- загрузка cart и account remotes через Module Federation Runtime;
+- маршруты корзины, checkout, авторизации, аккаунта, заказов и избранного;
+- rewrites к API и remote assets.
 
-На текущем этапе shell проксирует catalog zone и подключает `shop-mf-cart` на клиенте.
-API и account remote ещё не подключены.
+На текущем этапе shell проксирует catalog zone и подключает `shop-mf-cart` и `shop-mf-account` на клиенте.
 
 ## Технологии
 
@@ -40,13 +39,15 @@ pnpm dev
 
 Для проверки интеграции каталога запустите рядом `shop-catalog` на порту `3001`.
 Для проверки cart remote запустите рядом `shop-mf-cart` на порту `3002`.
+Для проверки account remote запустите рядом `shop-mf-account` на порту `3003`.
+
 Shell должен быть открыт как основной вход в приложение:
 
 ```text
 http://localhost:3000
 ```
 
-Переменная окружения:
+Переменные окружения:
 
 ```text
 CATALOG_ORIGIN=http://localhost:3001
@@ -55,8 +56,7 @@ NEXT_PUBLIC_CART_MANIFEST_URL=http://localhost:3002/mf-manifest.json
 NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 ```
 
-Если переменная не задана, используется локальное значение `http://localhost:3001`.
-Для cart/account manifest URL также есть локальные значения по умолчанию.
+Если переменная не задана, используются локальные значения по умолчанию.
 
 Через shell доступны маршруты каталога:
 
@@ -75,16 +75,24 @@ NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 /checkout
 ```
 
-`/cart` и `/checkout` получают `noindex`. Во время server prerender shell отдаёт fallback-разметку,
-а Module Federation Runtime загружает remote только в браузере после mount. Это позволяет выполнять
-`next build` без запущенного `shop-mf-cart`.
+Через shell доступны маршруты account remote:
 
-Browser-запросы remote к `/api/v1/*` проксируются shell в `API_ORIGIN`. Локально это
-`http://localhost:4000`, поэтому cart remote внутри shell остаётся same-origin для браузера.
+```text
+/login
+/register
+/account
+/account/orders
+/account/favorites
+```
+
+`/cart`, `/checkout`, `/login`, `/register` и `/account*` получают `noindex`. Во время server prerender shell отдаёт fallback-разметку, а Module Federation Runtime загружает remote только в браузере после mount. Это позволяет выполнять `next build` без запущенных remotes.
+
+Browser-запросы remote к `/api/v1/*` проксируются shell в `API_ORIGIN`. Локально это `http://localhost:4000`, поэтому remotes внутри shell остаются same-origin для браузера.
 
 ## Module Federation
 
 Shell использует один runtime instance с именем `shop_shell`.
+
 Remote `cart` загружается из `NEXT_PUBLIC_CART_MANIFEST_URL` и предоставляет:
 
 ```text
@@ -93,11 +101,21 @@ cart/CartPage
 cart/CheckoutPage
 ```
 
-`CartIndicator` встраивается в Header. Если manifest недоступен или remote не загрузился за timeout,
-показывается fallback и кнопка повторной загрузки.
+`CartIndicator` встраивается в Header. Если manifest недоступен или remote не загрузился за timeout, показывается fallback и кнопка повторной загрузки.
 
-Remote `account` пока только зарегистрирован через `NEXT_PUBLIC_ACCOUNT_MANIFEST_URL` для следующего
-этапа интеграции.
+Remote `account` загружается из `NEXT_PUBLIC_ACCOUNT_MANIFEST_URL` и предоставляет:
+
+```text
+account/AccountBadge
+account/AccountMenu
+account/LoginPage
+account/RegisterPage
+account/ProfilePage
+account/OrdersPage
+account/FavoritesPage
+```
+
+`AccountBadge` и `AccountMenu` встраиваются в Header. Страницы account remote доступны через shell routes и загружаются только в браузере после mount.
 
 ## Проверки
 
@@ -111,6 +129,5 @@ pnpm build
 ## Текущие ограничения
 
 - главная страница использует статические placeholder-данные;
-- API пока не подключен;
-- account remote пока не подключен к UI;
+- account remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него;
 - cart remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него.
