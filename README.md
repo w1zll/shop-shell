@@ -52,6 +52,7 @@ http://localhost:3000
 ```text
 CATALOG_ORIGIN=http://localhost:3001
 API_ORIGIN=http://localhost:4000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_CART_MANIFEST_URL=http://localhost:3002/mf-manifest.json
 NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 ```
@@ -128,6 +129,6 @@ pnpm build
 
 ## Текущие ограничения
 
-- главная страница использует статические placeholder-данные;
+- главная страница зависит от Catalog API и показывает cold-start сообщение с повтором запроса, если API временно недоступен;
 - account remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него;
 - cart remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него.
