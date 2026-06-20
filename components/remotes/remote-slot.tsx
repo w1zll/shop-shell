@@ -8,6 +8,7 @@ import { getShellFederationRuntime } from "../../lib/module-federation/runtime";
 import { RemoteErrorBoundary } from "./remote-error-boundary";
 
 type RemoteSlotProps<TProps extends Record<string, unknown>> = {
+  errorFallback?: (error: Error, retryRemote: () => void) => ReactNode;
   expose: string;
   fallback: ReactNode;
   props?: TProps;
@@ -55,6 +56,7 @@ function resolveRemoteComponent<TProps extends Record<string, unknown>>(
 }
 
 export function RemoteSlot<TProps extends Record<string, unknown> = Record<string, never>>({
+  errorFallback,
   expose,
   fallback,
   props,
@@ -98,21 +100,27 @@ export function RemoteSlot<TProps extends Record<string, unknown> = Record<strin
 
   return (
     <RemoteErrorBoundary
-      fallback={(error, retryRemote) => (
-        <RemoteErrorFallback remoteName={label} onRetry={retryRemote}>
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm font-medium text-[var(--shop-foreground)]">
-                Не удалось загрузить удалённый модуль.
-              </p>
-              <p className="mt-1 text-xs text-[var(--shop-muted-foreground)]">{error.message}</p>
+      fallback={(error, retryRemote) =>
+        errorFallback ? (
+          errorFallback(error, retryRemote)
+        ) : (
+          <RemoteErrorFallback remoteName={label} onRetry={retryRemote}>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm font-medium text-[var(--shop-foreground)]">
+                  Не удалось загрузить удаленный модуль.
+                </p>
+                <p className="mt-1 text-xs text-[var(--shop-muted-foreground)]">
+                  {error.message}
+                </p>
+              </div>
+              <Button size="sm" type="button" variant="outline" onClick={retryRemote}>
+                Повторить
+              </Button>
             </div>
-            <Button size="sm" type="button" variant="outline" onClick={retryRemote}>
-              Повторить
-            </Button>
-          </div>
-        </RemoteErrorFallback>
-      )}
+          </RemoteErrorFallback>
+        )
+      }
       onError={(error, info) => {
         console.error("[shop-shell] Ошибка загрузки remote", {
           error,
