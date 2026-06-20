@@ -18,7 +18,14 @@ export function CartIndicatorFallback() {
 }
 
 export function CartIndicatorRemote() {
-  return <RemoteSlot expose="CartIndicator" fallback={<CartIndicatorFallback />} remoteName="cart" />;
+  return (
+    <RemoteSlot
+      errorFallback={() => <CartIndicatorFallback />}
+      expose="CartIndicator"
+      fallback={<CartIndicatorFallback />}
+      remoteName="cart"
+    />
+  );
 }
 
 function CartPageFallback() {

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { Heart, UserRound } from "lucide-react";
@@ -9,37 +9,101 @@ import { RemoteSlot } from "./remote-slot";
 export function AccountBadgeFallback() {
   return (
     <div className="shell-sm-up">
-      <Button asChild className="gap-2" variant="outline">
-        <Link href="/account">
-          <UserRound className="size-4" aria-hidden="true" />
-          Войти
-        </Link>
-      </Button>
+      <AccountBadgeButton />
     </div>
+  );
+}
+
+function AccountBadgeButton() {
+  return (
+    <Button asChild className="gap-2" variant="outline">
+      <Link href="/account">
+        <UserRound className="size-4" aria-hidden="true" />
+        Войти
+      </Link>
+    </Button>
   );
 }
 
 export function AccountBadgeRemote() {
   return (
-    <RemoteSlot expose="AccountBadge" fallback={<AccountBadgeFallback />} remoteName="account" />
+    <RemoteSlot
+      errorFallback={() => (
+        <UnavailableAccountControl
+          label="Аккаунт временно недоступен"
+          title="Аккаунт временно недоступен: account remote не загрузился"
+        />
+      )}
+      expose="AccountBadge"
+      fallback={<AccountBadgeFallback />}
+      remoteName="account"
+    />
   );
 }
 
 export function AccountMenuFallback() {
   return (
     <div className="shell-sm-up">
-      <Button asChild aria-label="Избранное" className="size-10 p-0" variant="ghost">
-        <Link href="/account/favorites">
-          <Heart className="size-4" aria-hidden="true" />
-        </Link>
-      </Button>
+      <AccountMenuButton />
     </div>
+  );
+}
+
+function AccountMenuButton() {
+  return (
+    <Button asChild aria-label="Избранное" className="size-10 p-0" variant="ghost">
+      <Link href="/account/favorites">
+        <Heart className="size-4" aria-hidden="true" />
+      </Link>
+    </Button>
   );
 }
 
 export function AccountMenuRemote() {
   return (
-    <RemoteSlot expose="AccountMenu" fallback={<AccountMenuFallback />} remoteName="account" />
+    <RemoteSlot
+      errorFallback={() => (
+        <UnavailableAccountControl
+          iconOnly
+          label="Избранное временно недоступно"
+          title="Избранное временно недоступно: account remote не загрузился"
+        />
+      )}
+      expose="AccountMenu"
+      fallback={<AccountMenuFallback />}
+      remoteName="account"
+    />
+  );
+}
+
+function UnavailableAccountControl({
+  iconOnly = false,
+  label,
+  title,
+}: Readonly<{ iconOnly?: boolean; label: string; title: string }>) {
+  return (
+    <span className="shell-sm-up" title={title}>
+      <Button
+        aria-label={label}
+        className={
+          iconOnly
+            ? "size-10 border border-red-500/70 p-0 text-red-600 opacity-100"
+            : "gap-2 border-red-500/70 text-red-600 opacity-100"
+        }
+        disabled
+        type="button"
+        variant={iconOnly ? "ghost" : "outline"}
+      >
+        {iconOnly ? (
+          <Heart className="size-4" aria-hidden="true" />
+        ) : (
+          <>
+            <UserRound className="size-4" aria-hidden="true" />
+            Аккаунт
+          </>
+        )}
+      </Button>
+    </span>
   );
 }
 
