@@ -6,6 +6,7 @@ import { Toaster } from "@w1zll/shop-ui";
 
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
+import { getPublicSiteUrl } from "../lib/site-url";
 
 export const metadata: Metadata = {
   title: {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Shop MFS",
   },
   description: "Демонстрационный интернет-магазин на микрофронтендах.",
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(getPublicSiteUrl()),
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
