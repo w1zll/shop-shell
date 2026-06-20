@@ -4,6 +4,7 @@ import { ArrowRight, BadgePercent, RefreshCw, ShieldCheck, Sparkles, Truck } fro
 import { Badge, Button, Card, CardContent, Container, Price } from "@w1zll/shop-ui";
 
 import { getHomePageData, type HomeProduct } from "../lib/home-data";
+import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -177,7 +178,7 @@ export default async function HomePage() {
                 </p>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className={styles.featuredProductGrid}>
                 {homeData.featuredProducts.map((product, index) => (
                   <Card key={product.slug} className="overflow-hidden">
                     <CardContent className="flex h-full flex-col gap-4 p-4">
