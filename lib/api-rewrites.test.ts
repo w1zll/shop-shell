@@ -20,4 +20,17 @@ describe("buildApiRewrites", () => {
       },
     ]);
   });
+
+  it("keeps protocol, host and port while dropping path segments", () => {
+    expect(buildApiRewrites("http://api.example.com:4100/base/path")).toEqual([
+      {
+        source: "/api/v1/:path*",
+        destination: "http://api.example.com:4100/api/v1/:path*",
+      },
+    ]);
+  });
+
+  it("throws for invalid API origins", () => {
+    expect(() => buildApiRewrites("not a url")).toThrow(TypeError);
+  });
 });

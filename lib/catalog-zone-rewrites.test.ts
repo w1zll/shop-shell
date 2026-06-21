@@ -42,4 +42,15 @@ describe("buildCatalogZoneRewrites", () => {
       destination: "https://catalog.example.com/catalog",
     });
   });
+
+  it("keeps the catalog-static rewrite on the normalized catalog origin", () => {
+    expect(buildCatalogZoneRewrites("https://catalog.example.com/base").at(-1)).toEqual({
+      source: "/catalog-static/:path*",
+      destination: "https://catalog.example.com/catalog-static/:path*",
+    });
+  });
+
+  it("throws for invalid catalog origins", () => {
+    expect(() => buildCatalogZoneRewrites("not a url")).toThrow(TypeError);
+  });
 });
