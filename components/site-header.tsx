@@ -54,8 +54,10 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button aria-label="Поиск" className="size-10 p-0" type="button" variant="ghost">
-            <Search className="size-4" aria-hidden="true" />
+          <Button asChild className="size-10 cursor-pointer p-0" variant="ghost">
+            <a href="/search" aria-label="Поиск">
+              <Search className="size-4" aria-hidden="true" />
+            </a>
           </Button>
           <AccountMenuRemote />
           <CartIndicatorRemote />
