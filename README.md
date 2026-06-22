@@ -51,10 +51,12 @@ http://localhost:3000
 
 ```text
 CATALOG_ORIGIN=http://localhost:3001
+CART_REMOTE_ORIGIN=http://localhost:3002
+ACCOUNT_REMOTE_ORIGIN=http://localhost:3003
 API_ORIGIN=http://localhost:4000
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_CART_MANIFEST_URL=http://localhost:3002/mf-manifest.json
-NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
+NEXT_PUBLIC_CART_MANIFEST_URL=/mf/cart/mf-manifest.json
+NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=/mf/account/mf-manifest.json
 ```
 
 Если переменная не задана, используются локальные значения по умолчанию.
@@ -89,6 +91,7 @@ NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=http://localhost:3003/mf-manifest.json
 `/cart`, `/checkout`, `/login`, `/register` и `/account*` получают `noindex`. Во время server prerender shell отдаёт fallback-разметку, а Module Federation Runtime загружает remote только в браузере после mount. Это позволяет выполнять `next build` без запущенных remotes.
 
 Browser-запросы remote к `/api/v1/*` проксируются shell в `API_ORIGIN`. Локально это `http://localhost:4000`, поэтому remotes внутри shell остаются same-origin для браузера.
+Remote assets проксируются через `/mf/cart/*` и `/mf/account/*`, поэтому manifest URLs могут оставаться same-origin.
 
 ## Module Federation
 
@@ -125,6 +128,45 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+```
+
+## Деплой на Vercel
+
+Shell разворачивается последним и становится публичным origin приложения. В `vercel.json` зафиксированы команды install/build, чтобы Vercel до установки зависимостей настроил доступ к приватному `@w1zll/shop-ui`.
+
+Настройки проекта:
+
+```text
+Framework Preset: Next.js
+Install Command: corepack enable && pnpm config set @w1zll:registry https://npm.pkg.github.com && pnpm config set '//npm.pkg.github.com/:_authToken' "$NPM_TOKEN" && pnpm install --frozen-lockfile
+Build Command: pnpm build
+```
+
+Переменные окружения:
+
+```text
+NODE_VERSION=24
+NPM_TOKEN=<GitHub Packages token с read:packages>
+CATALOG_ORIGIN=https://<catalog-host>
+CART_REMOTE_ORIGIN=https://<cart-remote-host>
+ACCOUNT_REMOTE_ORIGIN=https://<account-remote-host>
+API_ORIGIN=https://<render-api-host>
+NEXT_PUBLIC_SITE_URL=https://<shell-host>
+NEXT_PUBLIC_CART_MANIFEST_URL=/mf/cart/mf-manifest.json
+NEXT_PUBLIC_ACCOUNT_MANIFEST_URL=/mf/account/mf-manifest.json
+```
+
+Production rewrites:
+
+```text
+/catalog/*        -> CATALOG_ORIGIN
+/category/*       -> CATALOG_ORIGIN
+/product/*        -> CATALOG_ORIGIN
+/search/*         -> CATALOG_ORIGIN
+/catalog-static/* -> CATALOG_ORIGIN
+/mf/cart/*        -> CART_REMOTE_ORIGIN
+/mf/account/*     -> ACCOUNT_REMOTE_ORIGIN
+/api/v1/*         -> API_ORIGIN
 ```
 
 ## Текущие ограничения

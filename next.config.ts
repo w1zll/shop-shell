@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 import { buildApiRewrites } from "./lib/api-rewrites";
 import { buildCatalogZoneRewrites } from "./lib/catalog-zone-rewrites";
+import { buildRemoteAssetRewrites } from "./lib/remote-asset-rewrites";
 
 const nextConfig: NextConfig = {
   images: {
@@ -14,7 +15,7 @@ const nextConfig: NextConfig = {
   },
   typedRoutes: true,
   rewrites() {
-    return [...buildApiRewrites(), ...buildCatalogZoneRewrites()];
+    return [...buildApiRewrites(), ...buildCatalogZoneRewrites(), ...buildRemoteAssetRewrites()];
   },
 };
 
