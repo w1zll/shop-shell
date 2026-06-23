@@ -14,7 +14,7 @@
 - маршруты корзины, checkout, авторизации, аккаунта, заказов и избранного;
 - rewrites к API и remote assets.
 
-На текущем этапе shell проксирует catalog zone и подключает `shop-mf-cart` и `shop-mf-account` на клиенте.
+shell проксирует catalog zone и подключает `shop-mf-cart` и `shop-mf-account` на клиенте.
 
 ## Технологии
 
@@ -30,7 +30,7 @@
 ## Локальная разработка
 
 Перед установкой зависимостей нужен доступ к GitHub Packages для `@w1zll/shop-ui`.
-Токен не хранится в репозитории. Registry для scope настроен в `.npmrc`, auth token должен быть в user-level `~/.npmrc`.
+Registry для scope настроен в `.npmrc`, auth token должен быть в user-level `~/.npmrc`.
 
 ```bash
 pnpm install
@@ -168,9 +168,3 @@ Production rewrites:
 /mf/account/*     -> ACCOUNT_REMOTE_ORIGIN
 /api/v1/*         -> API_ORIGIN
 ```
-
-## Текущие ограничения
-
-- главная страница зависит от Catalog API и показывает cold-start сообщение с повтором запроса, если API временно недоступен;
-- account remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него;
-- cart remote загружается только на клиенте, поэтому SEO-критичный контент не должен зависеть от него.
