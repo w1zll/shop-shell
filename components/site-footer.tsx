@@ -6,6 +6,7 @@ const footerLinks = [
   { href: "/cart", label: "Корзина" },
   { href: "/checkout", label: "Оформление" },
   { href: "/account", label: "Профиль" },
+  { href: "/account/orders", label: "Заказы" },
 ] as const;
 
 export function SiteFooter() {
