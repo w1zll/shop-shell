@@ -2,7 +2,7 @@
 import { Menu, Search } from "lucide-react";
 import { Button, Container, Logo } from "@w1zll/shop-ui";
 
-import { AccountBadgeRemote, AccountMenuRemote } from "./remotes/account-remotes";
+import { AccountBadgeRemote } from "./remotes/account-remotes";
 import { CartIndicatorRemote } from "./remotes/cart-remotes";
 
 const navItems = [
@@ -59,7 +59,6 @@ export function SiteHeader() {
               <Search className="size-4" aria-hidden="true" />
             </a>
           </Button>
-          <AccountMenuRemote />
           <CartIndicatorRemote />
           <AccountBadgeRemote />
         </div>

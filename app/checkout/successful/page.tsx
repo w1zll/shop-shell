@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button, Container } from "@w1zll/shop-ui";
 
+import { CheckoutSuccessBonus } from "../../../components/checkout-success-bonus";
+
 export const metadata: Metadata = {
   title: "Заказ оформлен",
   description: "Заказ успешно оформлен в демонстрационном магазине Shop MFS.",
@@ -11,7 +13,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CheckoutSuccessfulPage() {
+type CheckoutSuccessfulPageProps = {
+  searchParams: Promise<{
+    orderId?: string | string[];
+  }>;
+};
+
+export default async function CheckoutSuccessfulPage({
+  searchParams,
+}: CheckoutSuccessfulPageProps) {
+  const params = await searchParams;
+  const orderId = Array.isArray(params.orderId) ? params.orderId[0] : params.orderId;
+
   return (
     <Container className="py-10">
       <section className="mx-auto max-w-2xl space-y-5 rounded-lg border border-[var(--shop-border)] p-6 text-center">
@@ -21,6 +34,7 @@ export default function CheckoutSuccessfulPage() {
           <p className="text-sm leading-6 text-[var(--shop-muted-foreground)]">
             Оплата прошла успешно. Историю заказов и текущий статус можно посмотреть в аккаунте.
           </p>
+          <CheckoutSuccessBonus orderId={orderId} />
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           <Button asChild>

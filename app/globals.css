@@ -37,7 +37,7 @@ a:not([class]) {
   gap: 0.25rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 880px) {
   .shell-mobile-menu {
     display: none;
   }
@@ -54,13 +54,5 @@ a:not([class]) {
 @media (min-width: 640px) {
   .shell-sm-up {
     display: block;
-  }
-}
-
-@media (max-width: 639px) {
-  input:not([type="checkbox"]):not([type="radio"]),
-  select,
-  textarea {
-    font-size: 16px;
   }
 }
